@@ -1,0 +1,1 @@
+DjangoApp project blog and other lessons.
