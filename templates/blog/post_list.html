@@ -25,6 +25,7 @@
                 <h5 class="card-title">{{ post.title }}</h5>
                 <p class="card-text">{{ post.text|linebreaksbr }}</p>
                 <a href="{% url 'post_detail' pk=post.pk %}" class="btn btn-primary">Read</a>
+                <a class="ml-3" href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.approved_comments.count }}</a>
             </div>
         </div>
 

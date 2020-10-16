@@ -45,4 +45,29 @@
         {% endif %}
 
     </div>
+
+    <hr>
+
+    {% for comment in post.comments.all %}
+        {% if user.is_authenticated or comment.approved_comment %}
+            <div class="comment mt-3">
+                <div class="date">
+                    {{ comment.created_date }}
+                    {% if not comment.approved_comment %}
+                        <a class="btn btn-primary btn-sm ml-3" href="{% url 'comment_approve' pk=comment.pk %}">add</a>
+                        <a class="btn btn-danger btn-sm" href="{% url 'comment_remove' pk=comment.pk %}">del</a>
+                    {% else %}
+                        <a class="btn btn-danger btn-sm ml-3" href="{% url 'comment_remove' pk=comment.pk %}">del</a>
+                    {% endif %}
+                </div>
+                <strong>{{ comment.author }}</strong>
+                <p>{{ comment.text|linebreaks }}</p>
+
+                <hr>
+            </div>
+        {% endif %}
+    {% empty %}
+        <p>No comments here yet :(</p>
+    {% endfor %}
+    <a class="btn btn-primary mt-3" href="{% url 'add_comment_to_post' pk=post.pk %}">Add comment</a>
 {% endblock %}
