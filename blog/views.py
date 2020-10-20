@@ -3,6 +3,7 @@ from django.utils import timezone
 from .models import Post, Comment
 from .forms import PostForm, CommentForm
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 
 def index_page(request):
@@ -10,7 +11,12 @@ def index_page(request):
 
 
 def post_list(request):
-    posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('-created_date')
+    search_query = request.GET.get('search', '')
+    if search_query:
+        posts = Post.objects.filter(Q(title__icontains=search_query) | Q(text__icontains=search_query))
+    else:
+        posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('-created_date')
+
     return render(request, 'blog/post_list.html', {'posts': posts})
 
 
